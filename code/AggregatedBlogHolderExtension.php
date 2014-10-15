@@ -16,11 +16,12 @@ class AggregatedBlogHolderExtension extends DataExtension {
 
 		//auto import
 		if($cs = DataObject::get('RssContentSource')) {
-			$cs = $cs->map("ID","Name","-- Select a source --",true);
+			$cs = $cs->map("ID","Name");
+			$cs->push(0,"-- Select a source --");
 		} else {
 			$cs = array('-- No sources have been created --');
 		}
-		$fields->addFieldToTab('Root.Content.AutoImport',
+		$fields->addFieldToTab('Root.AutoImport',
 			new DropdownField('RssContentSourceID', '', $cs)
 		);
 	}
@@ -49,7 +50,7 @@ class AggregatedBlogHolderExtension extends DataExtension {
 
 
 
-		ExternalContentAdmin::migrate($request);
+		singleton('ExternalContentAdmin')->migrate($request);
 		//echo "import done";
 
 
