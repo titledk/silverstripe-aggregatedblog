@@ -4,7 +4,6 @@
  * Updating aggregated blogs
  * 
  * 
- * Only used for testing/developing
  * Run like this:
  * php public/framework/cli-script.php /UpdateAggregatedBlogsTask
  *

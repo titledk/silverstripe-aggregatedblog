@@ -18,6 +18,11 @@ class AggregatedBlogEntryExtension extends DataExtension {
 		parent::onAfterWrite();
 
 		$page = $this->owner;
+		
+		//Importing - this should only happen once
+		if ($page->ImportComplete) {
+			return;
+		}
 
 		
 		//Can't remember what this was for
@@ -96,6 +101,7 @@ class AggregatedBlogEntryExtension extends DataExtension {
 
 
 		$page->Content = $html->innertext;
+		$page->ImportComplete = true;
 		$page->writeToStage('Stage');
 		$page->publish('Stage', 'Live');
 
