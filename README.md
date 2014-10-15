@@ -15,7 +15,7 @@ the following part of your `composer.json` (apart from the ususals):_
 		"repositories": [
 			{
 				"type": "vcs",
-				"url": "https://github.com/titledk/aggregatedblog"
+				"url": "https://github.com/anselmdk/silverstripe-rssconnector"
 			}
 		],
 		"require": {
