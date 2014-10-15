@@ -30,6 +30,9 @@ class AggregatedBlogEntryExtension extends DataExtension {
 			AggregatedBlogEntryExtension::$afterWriteLoop = $page->ID;
 		}
 
+		
+		//Debug::dump($page->Title . " (#$page->ID)");
+		
 		//Importing images
 
 
@@ -43,10 +46,25 @@ class AggregatedBlogEntryExtension extends DataExtension {
 			if ($i < 99) {
 				$folderPath = 'import/' . $page->ID;
 
-				$folder = Folder::findOrMake($folderPath);
-				$tempFileName = $i;
-				$filepath = "assets/" . $folderPath . "/" . $tempFileName;
 
+				
+				$parsedSource = parse_url($e->src);
+				$source = $parsedSource['scheme'] . 
+					"://" .
+					$parsedSource['host'] .
+					$parsedSource['path'];
+				
+				$sourceName = pathinfo($parsedSource['path'], PATHINFO_BASENAME);
+				//Debug::dump($source);
+				//Debug::dump($sourceName);
+
+				
+				
+				$folder = Folder::find_or_make($folderPath);
+				//$tempFileName = $i;
+				$tempFileName = $sourceName;
+				$filepath = "assets/" . $folderPath . "/" . $tempFileName;
+				
 				$src = str_replace("amp;","",$e->src);
 				$img = file_get_contents($src);
 				//$size = getimagesize($img);
@@ -77,7 +95,7 @@ class AggregatedBlogEntryExtension extends DataExtension {
 		}
 
 
-		$page->Content = $html->->innertext;
+		$page->Content = $html->innertext;
 		$page->writeToStage('Stage');
 		$page->publish('Stage', 'Live');
 
