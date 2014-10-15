@@ -1,0 +1,23 @@
+{
+  "name": "titledk/aggregatedblog",
+  "description": "Aggregate or import a blog from an RSS feed",
+  "type": "silverstripe-module",
+  "homepage": "https://github.com/titledk/silverstripe-aggregatedblog",
+  "keywords": ["silverstripe", "rss", "blog", "import", "aggregate"],
+  "authors": [
+    {"name": "Anselm Christophersen","email": "ac@anselm.dk"}
+    
+  ],
+  "support": {
+    "issues": "https://github.com/titledk/silverstripe-aggregatedblog/issues"
+  },
+  "require": {
+    "silverstripe/cms": "~3.1",
+    "silverstripe/framework": "~3.1",
+    "anselmdk/silverstripe-rssconnector": "dev-master",
+    "sunra/php-simple-html-dom-parser": "dev-master"  
+  },
+  "extra": {
+    "installer-name": "aggregatedblog"
+  }
+}	

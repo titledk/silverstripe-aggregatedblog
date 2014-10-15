@@ -1,0 +1,10 @@
+---
+Name: aggregatedblogconfig
+After: 'framework/*','cms/*'
+---
+ExternalBlogEntry:
+  extensions:
+    - AggregatedBlogEntryExtension
+BlogHolder:
+  extensions:
+    - AggregatedBlogHolderExtension
