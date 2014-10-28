@@ -8,7 +8,7 @@ use Sunra\PhpSimple\HtmlDomParser;
 class AggregatedBlogEntryExtension extends DataExtension {
 
 	static $db = array(
-		'ImportComplete' => 'Boolean'
+		//'ImportComplete' => 'Boolean'
 	);
 	
 
@@ -20,9 +20,9 @@ class AggregatedBlogEntryExtension extends DataExtension {
 		$page = $this->owner;
 		
 		//Importing - this should only happen once
-		if ($page->ImportComplete) {
-			return;
-		}
+		//if ($page->ImportComplete) {
+		//	return;
+		//}
 
 		
 		//Can't remember what this was for
@@ -54,45 +54,53 @@ class AggregatedBlogEntryExtension extends DataExtension {
 
 				
 				$parsedSource = parse_url($e->src);
-				$source = $parsedSource['scheme'] . 
-					"://" .
-					$parsedSource['host'] .
-					$parsedSource['path'];
 				
-				$sourceName = pathinfo($parsedSource['path'], PATHINFO_BASENAME);
-				//Debug::dump($source);
-				//Debug::dump($sourceName);
-
-				
-				
-				$folder = Folder::find_or_make($folderPath);
-				//$tempFileName = $i;
-				$tempFileName = $sourceName;
-				$filepath = "assets/" . $folderPath . "/" . $tempFileName;
-				
-				$src = str_replace("amp;","",$e->src);
-				$img = file_get_contents($src);
-				//$size = getimagesize($img);
-				//var_dump($img);
-
-				$file = File::find($filepath);
-				if (!$file) {
-					$file = new File();
-					$file->Filename = $filepath;
+				//new way of checking for external images
+				//-if scheme is set we download the image, 
+				//else we'll leave it, as then it will probably already 
+				//have been downloaded
+				if (isset($parsedSource['scheme'])) {
+					
+					$source = $parsedSource['scheme'] . 
+						"://" .
+						$parsedSource['host'] .
+						$parsedSource['path'];
+					
+					$sourceName = pathinfo($parsedSource['path'], PATHINFO_BASENAME);
+					//Debug::dump($source);
+					//Debug::dump($sourceName);
+	
+					
+					
+					$folder = Folder::find_or_make($folderPath);
+					//$tempFileName = $i;
+					$tempFileName = $sourceName;
+					$filepath = "assets/" . $folderPath . "/" . $tempFileName;
+					
+					$src = str_replace("amp;","",$e->src);
+					$img = file_get_contents($src);
+					//$size = getimagesize($img);
+					//var_dump($img);
+	
+					$file = File::find($filepath);
+					if (!$file) {
+						$file = new File();
+						$file->Filename = $filepath;
+					}
+					file_put_contents(Director::baseFolder() . "/" . $filepath, $img);
+					//$file->Name = $a["FileName"];
+					//$file->setName($tempFileName);
+					$file->write();
+					$file->setName($i);
+	
+					$file->setParentID($folder->ID);
+	
+					//$file->setName($filepath);
+					$file->ClassName = "Image";
+					$file->write();
+	
+					$e->src = "/" . $filepath;
 				}
-				file_put_contents(Director::baseFolder() . "/" . $filepath, $img);
-				//$file->Name = $a["FileName"];
-				//$file->setName($tempFileName);
-				$file->write();
-				$file->setName($i);
-
-				$file->setParentID($folder->ID);
-
-				//$file->setName($filepath);
-				$file->ClassName = "Image";
-				$file->write();
-
-				$e->src = "/" . $filepath;
 
 			}
 			$i = $i + 1;
